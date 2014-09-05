@@ -100,19 +100,6 @@ struct array
 		return iterator(_end);
 	}
 
-	// increment operator to work with stl algorithms
-	array& operator++ ()
-	{
-		values++;
-		return *this;
-	}
-	array operator++ (int _anything)
-	{
-		array arr = *this;
-		++(*this);
-		return *arr;
-	}
-
 	// for printing purpose
 	friend std::ostream& operator<<(std::ostream& os, const array& obj)
 	{
