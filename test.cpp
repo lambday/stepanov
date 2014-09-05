@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include <algorithm>
-#include <instrumented.h>
+#include <compare_sort/instrumented.h>
 #include <set>
 
 using namespace std;
