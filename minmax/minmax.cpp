@@ -78,8 +78,31 @@ void test3()
 	std::cout << "max:" << max_el << ":" << *max_el << std::endl;
 }
 
+void test4()
+{
+	const size_t n = 5;
+	typedef int value_type;
+	stepanov::array<value_type> a(n);
+	std::cout << a << std::endl;
+
+	// case 1
+	std::iota(a.begin(), a.end(), 1);
+	std::random_shuffle(a.begin(), a.end());
+	std::pair<int*, int*> minmax_el = stepanov::minmax_element(a.begin(), a.end());
+	std::cout << a << std::endl;
+	std::cout << "min:" << minmax_el.first << ":" << *minmax_el.first << std::endl;
+	std::cout << "max:" << minmax_el.second << ":" << *minmax_el.second << std::endl;
+
+	// case 2
+	std::fill(a.begin(), a.end(), 5);
+	minmax_el = stepanov::minmax_element(a.begin(), a.end());
+	std::cout << a << std::endl;
+	std::cout << "min:" << minmax_el.first << ":" << *minmax_el.first << std::endl;
+	std::cout << "max:" << minmax_el.second << ":" << *minmax_el.second << std::endl;
+}
+
 int main(int argc, char **argv)
 {
-	test3();
+	test4();
 	return 0;
 }

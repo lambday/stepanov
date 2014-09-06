@@ -70,7 +70,7 @@ struct array
 
 	explicit array(size_t _size) : size(_size)
 	{
-		values = new value_type[size];
+		values = new value_type[size]();
 		_begin = values;
 		_end = _begin + size;
 	}

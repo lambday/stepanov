@@ -28,6 +28,7 @@
 #include <iostream>
 #include <algorithm>
 #include <array.h>
+#include <map>
 
 namespace stepanov
 {
@@ -121,6 +122,70 @@ template <class I>
 I max_element(I first, I last)
 {
 	return stepanov::max_element(first, last, std::less<typename I::value_type>());
+}
+
+// for same elements, min should return the leftmost and max should
+// return the rightmost
+template <typename I, class Comparator>
+// requires I to be a ForwardIterator
+// and Comparator to be StrictWeakOrdered on the value_type(I)
+std::pair<I, I> minmax_element(I first, I last, Comparator cmp)
+{
+	// handle size 0 case
+	if (first == last)
+		return std::make_pair(last, last);
+
+	// for the following, we know that the size is at least 1
+	I current_min = first;
+	++first;
+	// needs checking - this may reach last
+	// if it does, the min and max are the same element
+	if (first == last)
+		return std::make_pair(current_min, current_min);
+	// for the following, we know that the size is at least 2
+	I current_max = first;
+
+	// initialization
+	// assuming cmp is <, we want to swap only when max is strictly
+	// lesser than min (no swapping when they are same)
+	if (cmp(*current_max, *current_min))
+		std::swap(current_min, current_max);
+	++first;
+
+	while (first != last)
+	{
+		// invariants:
+		// current_min contains the running min
+		// currnet_max contains the running max
+		// first is at the 1st one we are looking for in a group of 2
+		I potential_min = first;
+		++first;
+		// handle odd case - group size of 1
+		I potential_max = first == last ? potential_min : first;
+
+		// first is only guaranteed to have moved up to position 1 next
+
+		if (cmp(*potential_max, *potential_min))
+			std::swap(potential_min, potential_max);
+
+		// update the current values
+		if (cmp(*potential_min, *current_min))
+			current_min = potential_min;
+		if (!cmp(*potential_max, *current_max))
+			current_max = potential_max;
+
+		// sanity check
+		if (first != last)
+			++first;
+	}
+
+	return std::make_pair(current_min, current_max);
+}
+
+template <class I>
+std::pair<I, I> minmax_element(I first, I last)
+{
+	return stepanov::minmax_element(first, last, std::less<typename I::value_type>());
 }
 
 }
